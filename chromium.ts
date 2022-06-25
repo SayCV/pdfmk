@@ -81,7 +81,8 @@ const executablePathForChannel = (channel: ChromeReleaseChannel): string => {
       `Could not find Google Chrome executable for channel '${channel}' at '${chromePath}'.`,
     );
   }
-
+  
+  console.log(chromePath);
   return chromePath;
 };
 
