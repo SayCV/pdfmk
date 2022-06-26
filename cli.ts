@@ -75,6 +75,16 @@ const { args, options } = await new Command()
 
 const inputPath = path.resolve(Deno.cwd(), args[0]);
 
+const headerTemplate = Deno.env.get("HEADER_TEMPLATE_FILE")
+  ?  await Deno.readTextFile(path.resolve(Deno.cwd(), Deno.env.get("HEADER_TEMPLATE_FILE")||''))
+  :  Deno.env.get("HEADER_TEMPLATE")
+  || "<div style=\"font-size: 9px; margin-left: 1cm;\"> </div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span>%%ISO-DATE%%</span></div>";
+
+const footerTemplate = Deno.env.get("FOOTER_TEMPLATE_FILE")
+  ?  await Deno.readTextFile(path.resolve(Deno.cwd(), Deno.env.get("FOOTER_TEMPLATE_FILE")||''))
+  :  Deno.env.get("FOOTER_TEMPLATE")
+  || "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span> / <span class='totalPages'></span></div>";
+
 const config: Config = {
   input: inputPath,
   output: args[1]
@@ -87,14 +97,8 @@ const config: Config = {
   margin: options.margin,
   prismTheme: options.prismTheme,
   mermaidTheme: options.mermaidTheme,
-  headerTemplate:  Deno.env.get("HEADER_TEMPLATE_FILE")
-    ?  await Deno.readTextFile(path.resolve(Deno.cwd(), Deno.env.get("HEADER_TEMPLATE_FILE")||''))
-    :  Deno.env.get("HEADER_TEMPLATE")
-    || "<div style=\"font-size: 9px; margin-left: 1cm;\"> </div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
-  footerTemplate:  Deno.env.get("FOOTER_TEMPLATE_FILE")
-    ?  await Deno.readTextFile(path.resolve(Deno.cwd(), Deno.env.get("FOOTER_TEMPLATE_FILE")||''))
-    :  Deno.env.get("FOOTER_TEMPLATE")
-    || "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span> / <span class='totalPages'></span></div>",
+  headerTemplate:  transformTemplate(headerTemplate),
+  footerTemplate:  transformTemplate(footerTemplate),
   chromePath: executablePathForChannel(options.channel),
 };
 
@@ -136,3 +140,25 @@ const browser = await puppeteer.launch({
 await printPDF(await parse(md, config, browser), config, browser);
 
 await browser.close();
+
+// https://github.com/yzane/vscode-markdown-pdf/pull/197
+/**
+ * Transform the text of the header or footer template, replacing the following supported placeholders:
+ *
+ * - `%%ISO-DATETIME%%` – For an ISO-based date and time format: `YYYY-MM-DD hh:mm:ss`
+ * - `%%ISO-DATE%%` – For an ISO-based date format: `YYYY-MM-DD`
+ * - `%%ISO-TIME%%` – For an ISO-based time format: `hh:mm:ss`
+ */
+ function transformTemplate(templateText: string) {
+  if (templateText.indexOf('%%ISO-DATETIME%%') !== -1) {
+    templateText = templateText.replace('%%ISO-DATETIME%%', new Date().toISOString().substr(0, 19).replace('T', ' '));
+  }
+  if (templateText.indexOf('%%ISO-DATE%%') !== -1) {
+    templateText = templateText.replace('%%ISO-DATE%%', new Date().toISOString().substr(0, 10));
+  }
+  if (templateText.indexOf('%%ISO-TIME%%') !== -1) {
+    templateText = templateText.replace('%%ISO-TIME%%', new Date().toISOString().substr(11, 8));
+  }
+
+  return templateText;
+}
