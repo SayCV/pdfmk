@@ -17,6 +17,8 @@ export interface Config {
   margin: string;
   prismTheme: PrismTheme;
   mermaidTheme: MermaidTheme;
+  headerTemplate: string;
+  footerTemplate: string;
   chromePath: string;
 }
 

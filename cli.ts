@@ -87,6 +87,10 @@ const config: Config = {
   margin: options.margin,
   prismTheme: options.prismTheme,
   mermaidTheme: options.mermaidTheme,
+  headerTemplate:  Deno.env.get("HEADER_TEMPLATE")
+    || "<div style=\"font-size: 9px; margin-left: 1cm;\"> </div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span class='date'></span></div>",
+  footerTemplate:  Deno.env.get("FOOTER_TEMPLATE")
+    || "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span> / <span class='totalPages'></span></div>",
   chromePath: executablePathForChannel(options.channel),
 };
 

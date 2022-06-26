@@ -24,6 +24,9 @@ const printPDF = async (html: string, config: Config, browser: Browser) => {
     },
     format: config.format,
     scale: config.scale,
+    displayHeaderFooter: true,
+    headerTemplate: config.headerTemplate,
+    footerTemplate: config.footerTemplate,
   });
 
   await page.close();
