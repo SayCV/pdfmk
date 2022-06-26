@@ -14,6 +14,7 @@ import {
   remarkMath,
   remarkParse,
   remarkRehype,
+  rehypeRaw,
   remarkToc,
   //shiki,
   unified,
@@ -50,7 +51,8 @@ const parse = async (md: string, config: Config, browser: Browser) => {
       theme: config.mermaidTheme,
       classname: ["mermaid"],
     })
-    .use(remarkRehype)
+    .use(remarkRehype, {allowDangerousHtml: true})
+    .use(rehypeRaw)
     .use(rehypeKatex)
     .use(rehypePrism)
     //.use(rehypeShiki, {

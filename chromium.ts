@@ -82,7 +82,7 @@ const executablePathForChannel = (channel: ChromeReleaseChannel): string => {
     );
   }
   
-  console.log(chromePath);
+  console.log(":: Found ", chromePath);
   return chromePath;
 };
 

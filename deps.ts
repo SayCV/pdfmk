@@ -19,6 +19,7 @@ export { default as remarkToc } from "https://esm.sh/remark-toc@8.0.1";
 export { default as rehypeParse } from "https://esm.sh/rehype-parse@8.0.4";
 export { default as rehypePrism } from "https://esm.sh/@mapbox/rehype-prism@0.8.0";
 export { default as remarkRehype } from "https://esm.sh/remark-rehype@10.1.0";
+export { default as rehypeRaw } from "https://esm.sh/rehype-raw@6";
 export { default as rehypeKatex } from "https://esm.sh/rehype-katex@6.0.2";
 export { default as rehypeDocument } from "https://esm.sh/rehype-document@6.0.1";
 
