@@ -2,7 +2,7 @@ import { path, Browser } from "./deps.ts";
 import type { Config } from "./types.ts";
 
 const printPDF = async (html: string, config: Config, browser: Browser) => {
-  const f = path.parse(config.output);
+  const f = path.parse(config.input);
   const tmpFileName: string = path.resolve(Deno.cwd(), path.join(f.dir, f.name + '.tmp.html'));
   await Deno.writeTextFile(tmpFileName, html);
   
