@@ -1,6 +1,5 @@
 import { path, Browser } from "./deps.ts";
 import type { Config } from "./types.ts";
-import { existsSync } from "https://deno.land/std/fs/mod.ts";
 
 const printPDF = async (html: string, config: Config, browser: Browser) => {
   const f = path.parse(config.output);
@@ -29,7 +28,8 @@ const printPDF = async (html: string, config: Config, browser: Browser) => {
 
   await page.close();
 
-  if (existsSync(tmpFileName)) {
+  const stat = await Deno.lstat(tmpFileName);
+  if (stat.isFile) {
     Deno.removeSync(tmpFileName);
   }
 };
