@@ -29,7 +29,7 @@ const printPDF = async (html: string, config: Config, browser: Browser) => {
     footerTemplate: config.footerTemplate,
   });
 
-  await page.close();
+  await browser.close();
 
   const stat = await Deno.lstat(tmpFileName);
   if (stat.isFile) {
