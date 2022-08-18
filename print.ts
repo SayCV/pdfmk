@@ -9,9 +9,10 @@ const printPDF = async (html: string, config: Config, browser: Browser) => {
   const page = await browser.newPage();
 
   // await page.setContent(html, {
-  //   waitUntil: "networkidle2",
+  //   timeout: 0, waitUntil: "networkidle2",
   // });
-  await page.goto(tmpFileName, { waitUntil: 'networkidle0' });
+  // https://pptr.dev/next/api/puppeteer.page.goforward#remarks
+  await page.goto(tmpFileName, { 'timeout': 60000, waitUntil: 'networkidle0' });
 
   await page.pdf({
     printBackground: true,
