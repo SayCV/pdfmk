@@ -5,14 +5,18 @@ const printPDF = async (html: string, config: Config, browser: Browser) => {
   const f = path.parse(config.input);
   const tmpFileName: string = path.resolve(Deno.cwd(), path.join(f.dir, f.name + '.tmp.html'));
   await Deno.writeTextFile(tmpFileName, html);
-  
+
   const page = await browser.newPage();
 
   // await page.setContent(html, {
   //   timeout: 0, waitUntil: "networkidle2",
   // });
   // https://pptr.dev/next/api/puppeteer.page.goforward#remarks
-  await page.goto(tmpFileName, { 'timeout': 60000, waitUntil: 'networkidle0' });
+  await page.goto(tmpFileName, { timeout: 60000, waitUntil: 'networkidle0' });
+
+  if (config.savePng) {
+    await page.screenshot({ path: path.resolve(Deno.cwd(), path.join(f.dir, f.name + '.png')), fullPage: true });
+  }
 
   await page.pdf({
     printBackground: true,
@@ -25,17 +29,16 @@ const printPDF = async (html: string, config: Config, browser: Browser) => {
     },
     format: config.format,
     scale: config.scale,
-    displayHeaderFooter: true,
+    displayHeaderFooter: false,
     headerTemplate: config.headerTemplate,
     footerTemplate: config.footerTemplate,
   });
 
   await page.close();
 
-  
-const saveHtml = Deno.env.get("SAVE_HTML") == "true"
-? true
-:  false;
+  const saveHtml = Deno.env.get("SAVE_HTML") == "true"
+    ? true
+    : false;
 
   const stat = await Deno.lstat(tmpFileName);
   if (stat.isFile && !saveHtml) {

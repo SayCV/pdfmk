@@ -71,6 +71,13 @@ const { args, options } = await new Command()
   .option("--channel <channel:channel>", "(dev) Chrome release channel.", {
     default: "chrome" as const,
   })
+  .option(
+    "--savePng <savePng>",
+    `Save png`,
+    {
+      default: false,
+    },
+  )
   .parse(Deno.args);
 
 const inputPath = path.resolve(Deno.cwd(), args[0]);

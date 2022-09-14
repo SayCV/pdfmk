@@ -20,6 +20,7 @@ export interface Config {
   headerTemplate: string;
   footerTemplate: string;
   chromePath: string;
+  savePng: boolean;
 }
 
 const PaperFormat = {
