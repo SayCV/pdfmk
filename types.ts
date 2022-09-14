@@ -21,6 +21,7 @@ export interface Config {
   footerTemplate: string;
   chromePath: string;
   savePng: boolean;
+  saveHtml: boolean;
 }
 
 const PaperFormat = {

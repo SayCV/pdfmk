@@ -73,7 +73,14 @@ const { args, options } = await new Command()
   })
   .option(
     "--savePng <savePng>",
-    `Save png`,
+    `Save png file`,
+    {
+      default: false,
+    },
+  )
+  .option(
+    "--saveHtml <saveHtml>",
+    `Save html file`,
     {
       default: false,
     },

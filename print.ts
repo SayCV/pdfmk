@@ -14,7 +14,11 @@ const printPDF = async (html: string, config: Config, browser: Browser) => {
   // https://pptr.dev/next/api/puppeteer.page.goforward#remarks
   await page.goto(tmpFileName, { timeout: 60000, waitUntil: 'networkidle0' });
 
-  if (config.savePng) {
+  const savePng = Deno.env.get("SAVE_PNG") == "true"
+    ? true
+    : config.savePng;
+
+  if (savePng) {
     await page.screenshot({ path: path.resolve(Deno.cwd(), path.join(f.dir, f.name + '.png')), fullPage: true });
   }
 
@@ -38,7 +42,7 @@ const printPDF = async (html: string, config: Config, browser: Browser) => {
 
   const saveHtml = Deno.env.get("SAVE_HTML") == "true"
     ? true
-    : false;
+    : config.saveHtml;
 
   const stat = await Deno.lstat(tmpFileName);
   if (stat.isFile && !saveHtml) {
