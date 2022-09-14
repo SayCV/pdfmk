@@ -32,8 +32,13 @@ const printPDF = async (html: string, config: Config, browser: Browser) => {
 
   await page.close();
 
+  
+const saveHtml = Deno.env.get("SAVE_HTML") == "true"
+? true
+:  false;
+
   const stat = await Deno.lstat(tmpFileName);
-  if (stat.isFile) {
+  if (stat.isFile && !saveHtml) {
     Deno.removeSync(tmpFileName);
   }
 };
