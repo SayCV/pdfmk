@@ -48,7 +48,14 @@ const { args, options } = await new Command()
     }
   })
   .option(
-    "-m, --margin <margin>",
+    "-h, --hMargin <hMargin>",
+    `Margin. (Default: "20mm")`,
+    {
+      default: "20mm",
+    },
+  )
+  .option(
+    "-v, --vMargin <vMargin>",
     `Margin. (Default: "20mm")`,
     {
       default: "20mm",
@@ -108,7 +115,8 @@ const config: Config = {
   tocHeading: options.tocHeading,
   format: options.format,
   scale: options.zoom,
-  margin: options.margin,
+  hMargin: options.hMargin,
+  vMargin: options.vMargin,
   prismTheme: options.prismTheme,
   mermaidTheme: options.mermaidTheme,
   headerTemplate:  transformTemplate(headerTemplate),

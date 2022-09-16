@@ -14,7 +14,8 @@ export interface Config {
   tocHeading: string;
   format: PaperFormat;
   scale: number;
-  margin: string;
+  hMargin: string;
+  vMargin: string;
   prismTheme: PrismTheme;
   mermaidTheme: MermaidTheme;
   headerTemplate: string;
