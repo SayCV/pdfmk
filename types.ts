@@ -23,6 +23,7 @@ export interface Config {
   chromePath: string;
   savePng: boolean;
   saveHtml: boolean;
+  svgo: boolean;
 }
 
 const PaperFormat = {

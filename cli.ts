@@ -60,7 +60,11 @@ const { args, options } = await new Command()
     {
       default: "20mm",
     },
-  )
+    )
+  .option(
+    "--svgo <svgo>", `Enable svg optimize`, {
+      default: false,
+    })
   .option(
     "-p, --prismTheme <theme:prismTheme>",
     "Prism theme. 44 themes available.",
@@ -119,6 +123,7 @@ const config: Config = {
   vMargin: options.vMargin,
   prismTheme: options.prismTheme,
   mermaidTheme: options.mermaidTheme,
+  svgo: options.svgo,
   headerTemplate:  transformTemplate(headerTemplate),
   footerTemplate:  transformTemplate(footerTemplate),
   chromePath: executablePathForChannel(options.channel),

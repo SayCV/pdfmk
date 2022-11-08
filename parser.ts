@@ -50,6 +50,7 @@ const parse = async (md: string, config: Config, browser: Browser) => {
       wrap: true,
       theme: config.mermaidTheme,
       classname: ["mermaid"],
+      svgo: null as any,
     })
     .use(remarkRehype, {allowDangerousHtml: true})
     .use(rehypeRaw)
