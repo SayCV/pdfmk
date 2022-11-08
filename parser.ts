@@ -19,7 +19,7 @@ import {
   //shiki,
   unified,
 } from "./deps.ts";
-import remarkMermaid from "./mermaid.ts";
+import { default as remarkMermaid } from "./mermaid.ts";
 import { isBaseTheme } from "./types.ts";
 import type { Config } from "./types.ts";
 import { defaultStyle } from "./styles.ts";
