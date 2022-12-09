@@ -19,6 +19,7 @@ import {
   //shiki,
   unified,
 } from "./deps.ts";
+import { default as remarkAutoNumber } from "./remark-autonumber.ts";
 import { default as remarkMermaid } from "./mermaid.ts";
 import { isBaseTheme } from "./types.ts";
 import type { Config } from "./types.ts";
@@ -41,6 +42,10 @@ const parse = async (md: string, config: Config, browser: Browser) => {
     .use(remarkToc, {
       heading: config.tocHeading,
       tight: true,
+    })
+    .use(remarkAutoNumber, {
+      enable: config.numberSections,
+      level: config.shiftHeadingLevelBy,
     })
     .use(remarkMermaid, {
       browser: browser,

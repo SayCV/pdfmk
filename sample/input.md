@@ -1,4 +1,4 @@
-# pdfmk sample
+## pdfmk sample
 
 **P**rint **D**ocument **F**rom **M**ar**k**down / **PDF** **M**a**k**er
 

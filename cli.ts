@@ -92,19 +92,37 @@ const { args, options } = await new Command()
       default: false,
     },
   )
+  .option(
+    "--number-sections <number-sections:boolean>",
+    `number-sections`,
+    {
+      default: false,
+    },
+  )
+  .option(
+    "--shift-heading-level-by <shift-heading-level-by:number>",
+    `Shift heading levels by a positive or negative integer.`,
+    {
+      default: -1,
+    },
+  )
   .parse(Deno.args);
 
 const inputPath = path.resolve(Deno.cwd(), args[0]);
 
 const headerTemplate = Deno.env.get("HEADER_TEMPLATE_FILE")
-  ?  await Deno.readTextFile(path.resolve(Deno.cwd(), Deno.env.get("HEADER_TEMPLATE_FILE")||''))
-  :  Deno.env.get("HEADER_TEMPLATE")
-  || "<div style=\"font-size: 9px; margin-left: 1cm;\"> </div> <div style=\"font-size: 9px; margin-left: auto; margin-right: 1cm; \"> <span>%%ISO-DATE%%</span></div>";
+  ? await Deno.readTextFile(
+    path.resolve(Deno.cwd(), Deno.env.get("HEADER_TEMPLATE_FILE") || ""),
+  )
+  : Deno.env.get("HEADER_TEMPLATE") ||
+    '<div style="font-size: 9px; margin-left: 1cm;"> </div> <div style="font-size: 9px; margin-left: auto; margin-right: 1cm; "> <span>%%ISO-DATE%%</span></div>';
 
 const footerTemplate = Deno.env.get("FOOTER_TEMPLATE_FILE")
-  ?  await Deno.readTextFile(path.resolve(Deno.cwd(), Deno.env.get("FOOTER_TEMPLATE_FILE")||''))
-  :  Deno.env.get("FOOTER_TEMPLATE")
-  || "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span> / <span class='totalPages'></span></div>";
+  ? await Deno.readTextFile(
+    path.resolve(Deno.cwd(), Deno.env.get("FOOTER_TEMPLATE_FILE") || ""),
+  )
+  : Deno.env.get("FOOTER_TEMPLATE") ||
+    "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span> / <span class='totalPages'></span></div>";
 
 const config: Config = {
   input: inputPath,
@@ -119,8 +137,10 @@ const config: Config = {
   vMargin: options.vMargin,
   prismTheme: options.prismTheme,
   mermaidTheme: options.mermaidTheme,
-  headerTemplate:  transformTemplate(headerTemplate),
-  footerTemplate:  transformTemplate(footerTemplate),
+  numberSections: options.numberSections,
+  shiftHeadingLevelBy: options.shiftHeadingLevelBy,
+  headerTemplate: transformTemplate(headerTemplate),
+  footerTemplate: transformTemplate(footerTemplate),
   chromePath: executablePathForChannel(options.channel),
 };
 
@@ -171,15 +191,24 @@ await browser.close();
  * - `%%ISO-DATE%%` – For an ISO-based date format: `YYYY-MM-DD`
  * - `%%ISO-TIME%%` – For an ISO-based time format: `hh:mm:ss`
  */
- function transformTemplate(templateText: string) {
-  if (templateText.indexOf('%%ISO-DATETIME%%') !== -1) {
-    templateText = templateText.replace('%%ISO-DATETIME%%', new Date().toISOString().substr(0, 19).replace('T', ' '));
+function transformTemplate(templateText: string) {
+  if (templateText.indexOf("%%ISO-DATETIME%%") !== -1) {
+    templateText = templateText.replace(
+      "%%ISO-DATETIME%%",
+      new Date().toISOString().substr(0, 19).replace("T", " "),
+    );
   }
-  if (templateText.indexOf('%%ISO-DATE%%') !== -1) {
-    templateText = templateText.replace('%%ISO-DATE%%', new Date().toISOString().substr(0, 10));
+  if (templateText.indexOf("%%ISO-DATE%%") !== -1) {
+    templateText = templateText.replace(
+      "%%ISO-DATE%%",
+      new Date().toISOString().substr(0, 10),
+    );
   }
-  if (templateText.indexOf('%%ISO-TIME%%') !== -1) {
-    templateText = templateText.replace('%%ISO-TIME%%', new Date().toISOString().substr(11, 8));
+  if (templateText.indexOf("%%ISO-TIME%%") !== -1) {
+    templateText = templateText.replace(
+      "%%ISO-TIME%%",
+      new Date().toISOString().substr(11, 8),
+    );
   }
 
   return templateText;

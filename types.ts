@@ -18,6 +18,8 @@ export interface Config {
   vMargin: string;
   prismTheme: PrismTheme;
   mermaidTheme: MermaidTheme;
+  numberSections: boolean;
+  shiftHeadingLevelBy: number;
   headerTemplate: string;
   footerTemplate: string;
   chromePath: string;
