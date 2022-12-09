@@ -33,7 +33,7 @@ const printPDF = async (html: string, config: Config, browser: Browser) => {
     },
     format: config.format,
     scale: config.scale,
-    displayHeaderFooter: false,
+    displayHeaderFooter: config.displayHeaderFooter,
     headerTemplate: config.headerTemplate,
     footerTemplate: config.footerTemplate,
   });

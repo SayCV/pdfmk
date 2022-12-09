@@ -61,7 +61,7 @@ const { args, options } = await new Command()
     },
   )
   .option(
-    "--svgo <svgo>", `Enable svg optimize`, {
+    "--svgo <svgo:boolean>", `Enable svg optimize`, {
     default: false,
   })
   .option(
@@ -109,6 +109,13 @@ const { args, options } = await new Command()
       default: -1,
     },
   )
+  .option(
+    "--display-header-footer <display-header-footer:boolean>",
+    `Display Header Footer`,
+    {
+      default: false,
+    },
+  )
   .parse(Deno.args);
 
 const inputPath = path.resolve(Deno.cwd(), args[0]);
@@ -143,6 +150,7 @@ const config: Config = {
   svgo: options.svgo,
   numberSections: options.numberSections,
   shiftHeadingLevelBy: options.shiftHeadingLevelBy,
+  displayHeaderFooter: options.displayHeaderFooter,
   headerTemplate: transformTemplate(headerTemplate),
   footerTemplate: transformTemplate(footerTemplate),
   chromePath: executablePathForChannel(options.channel),

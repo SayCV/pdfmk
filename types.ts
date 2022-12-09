@@ -20,6 +20,7 @@ export interface Config {
   mermaidTheme: MermaidTheme;
   numberSections: boolean;
   shiftHeadingLevelBy: number;
+  displayHeaderFooter: boolean;
   headerTemplate: string;
   footerTemplate: string;
   chromePath: string;
