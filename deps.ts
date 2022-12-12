@@ -23,6 +23,8 @@ export { default as rehypeRaw } from "https://esm.sh/rehype-raw@6";
 export { default as rehypeKatex } from "https://esm.sh/rehype-katex@6.0.2";
 export { default as rehypeDocument } from "https://esm.sh/rehype-document@6.0.1";
 
+export { osLocale, osLocaleSync } from "https://esm.sh/os-locale@6.0.2";
+
 // Currently shiki doesn't work: see https://github.com/shikijs/shiki/issues/131
 //export * as shiki from "https://esm.sh/shiki";
 //export { default as rehypeShiki } from "https://esm.sh/@leafac/rehype-shiki";

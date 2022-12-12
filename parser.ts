@@ -1,6 +1,7 @@
 import {
   Browser,
   path,
+  osLocale, osLocaleSync,
   rehypeAutolinkHeadings,
   rehypeDocument,
   rehypeKatex,
@@ -25,13 +26,21 @@ import { isBaseTheme } from "./types.ts";
 import type { Config } from "./types.ts";
 import { defaultStyle } from "./styles.ts";
 
+async function getDefaultFootnoteLabel() {
+  // en-US
+  const lang = await osLocale({spawn: false});
+  console.log('lang', lang);
+  const is_zh = lang && lang.startsWith("zh") ? true : true;
+  return is_zh ? '注释:' : 'Footnotes';
+}
+
 const parse = async (md: string, config: Config, browser: Browser) => {
   // cdn resolution: there are two repos providing prism themes
   const themeFileURL = config.prismTheme === "default"
     ? `https://cdn.skypack.dev/prismjs/themes/prism.css`
     : isBaseTheme(config.prismTheme)
-    ? `https://cdn.skypack.dev/prismjs/themes/${config.prismTheme}.css`
-    : `https://cdn.skypack.dev/prism-themes/themes/prism-${config.prismTheme}.css`;
+      ? `https://cdn.skypack.dev/prismjs/themes/${config.prismTheme}.css`
+      : `https://cdn.skypack.dev/prism-themes/themes/prism-${config.prismTheme}.css`;
 
   const processor = unified()
     .use(remarkParse)
@@ -57,7 +66,11 @@ const parse = async (md: string, config: Config, browser: Browser) => {
       classname: ["mermaid"],
       svgo: null as any,
     })
-    .use(remarkRehype, {allowDangerousHtml: true})
+    .use(remarkRehype, {
+      allowDangerousHtml: true,
+      footnoteLabel: await getDefaultFootnoteLabel(),
+      //footnoteBackLabel: '返回',
+    })
     .use(rehypeRaw)
     .use(rehypeKatex)
     .use(rehypePrism)
