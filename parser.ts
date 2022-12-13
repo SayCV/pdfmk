@@ -1,7 +1,7 @@
 import {
   Browser,
   path,
-  osLocale, osLocaleSync,
+  i18next,
   rehypeAutolinkHeadings,
   rehypeDocument,
   rehypeKatex,
@@ -28,9 +28,8 @@ import { defaultStyle } from "./styles.ts";
 
 async function getDefaultFootnoteLabel() {
   // en-US
-  const lang = await osLocale({spawn: false});
-  console.log('lang', lang);
-  const is_zh = lang && lang.startsWith("zh") ? true : true;
+  const systemLocale = await Intl.DateTimeFormat().resolvedOptions().locale;
+  const is_zh = systemLocale && systemLocale.startsWith("zh") ? true : false;
   return is_zh ? '注释:' : 'Footnotes';
 }
 
