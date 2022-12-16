@@ -16,8 +16,12 @@ import { createRequire } from "https://deno.land/std@0.103.0/node/module.ts";
 
 import parsePdf from "npm:pdfjs-parse@1";
 import { PDFDocument } from 'npm:pdf-lib@1';
-// @deno-types=npm:jsdom@19/index.d.ts"
-import JSDOM from 'npm:jsdom@19';
+
+/// @deno-types="https://cdn.jsdelivr.net/npm/@types/jsdom@16.2.11/index.d.ts"
+//import { JSDOM } from "https://jspm.dev/npm:jsdom@20"
+import jsdom from 'https://dev.jspm.io/npm:jsdom@20.0.0';
+const { JSDOM } = jsdom as any;
+
 import UID from 'npm:uid-safe@2';
 import inlineCss from 'npm:inline-css@3';
 import handlebars from 'npm:handlebars@4';
