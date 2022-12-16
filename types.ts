@@ -150,3 +150,11 @@ export function isBaseTheme(theme: PrismTheme): theme is PrismThemeBase {
 export function isPlusTheme(theme: PrismTheme): theme is PrismThemePlus {
   return Object.values(PrismThemePlus).includes(theme as PrismThemePlus);
 }
+
+export type TocEntry = {
+  id: string
+  title: string
+  level: number
+  href: string
+  page?: number
+};

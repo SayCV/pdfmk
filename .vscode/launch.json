@@ -14,7 +14,7 @@
                 "run",
                 //"--inspect",
                 "--inspect-brk",
-                "--no-check",
+                "--no-check=remote",
                 "--allow-all",
                 "--unstable",
                 "${fileBasename}",
