@@ -195,7 +195,7 @@ const remarkMermaid: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
     const html = `<!DOCTYPE html>`;
     await page.setContent(html);
     await page.addScriptTag({
-      url: "https://unpkg.com/mermaid/dist/mermaid.min.js",
+      url: "https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js",
     });
     visit(node, isMermaid, visitor);
     await Promise.all(promises.map((t) => t()));
