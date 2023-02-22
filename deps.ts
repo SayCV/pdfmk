@@ -47,7 +47,7 @@ export type { VFileCompatible } from "https://esm.sh/vfile@5.3.4";
 export { visit } from "https://esm.sh/unist-util-visit@4.1.0";
 
 // puppeteer deps
-export { default as puppeteer } from "https://deno.land/x/puppeteer@9.0.2/mod.ts";
+export { default as puppeteer } from "https://deno.land/x/puppeteer@16.2.0/mod.ts";
 export type {
   Browser,
   BrowserConnectOptions,
