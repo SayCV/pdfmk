@@ -24,6 +24,7 @@ export { default as rehypeKatex } from "https://esm.sh/rehype-katex@6.0.2";
 export { default as rehypeDocument } from "https://esm.sh/rehype-document@6.0.1";
 
 export { default as i18next } from "https://deno.land/x/i18next/index.js";
+export { substitute } from "https://deno.land/x/substitute@v0.2.1/mod.ts";
 
 // Currently shiki doesn't work: see https://github.com/shikijs/shiki/issues/131
 //export * as shiki from "https://esm.sh/shiki";

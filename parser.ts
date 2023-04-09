@@ -2,6 +2,7 @@ import {
   Browser,
   path,
   i18next,
+  substitute,
   rehypeAutolinkHeadings,
   rehypeDocument,
   rehypeKatex,
@@ -31,6 +32,16 @@ async function getDefaultFootnoteLabel() {
   const systemLocale = await Intl.DateTimeFormat().resolvedOptions().locale;
   const is_zh = systemLocale && systemLocale.startsWith("zh") ? true : false;
   return is_zh ? '注释:' : 'Footnotes';
+}
+
+async function preprocessStyleCssFile(config: Config) {
+  let style_string = ''
+  if (config.style) {
+    const style_file = path.resolve(Deno.cwd(), config.style)
+    style_string = await Deno.readTextFile(style_file);
+    style_string = substitute(style_string, Deno.env.get);
+  }
+  return config.style ? style_string : defaultStyle;
 }
 
 const parse = async (md: string, config: Config, browser: Browser) => {
@@ -91,9 +102,7 @@ const parse = async (md: string, config: Config, browser: Browser) => {
           type: "text/css",
         },
       ],
-      style: config.style
-        ? await Deno.readTextFile(path.resolve(Deno.cwd(), config.style))
-        : defaultStyle,
+      style: await preprocessStyleCssFile(config),
     })
     .use(rehypeSlug)
     .use(rehypeAutolinkHeadings)

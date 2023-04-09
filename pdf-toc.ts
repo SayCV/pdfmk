@@ -248,6 +248,20 @@ async function run_test() {
 
   await extractPDFToc(pdfBuffer, options);
   console.log(options.content);
+
+  const content =
+    '<div class="print-toc">{{#each _toc}}<a href="{{this.id}}">{{this.title}}</a>{{/each}}</div><h1 id="test">hello</h1>';
+  const options2 = pdfTocOptionsFactory({
+    content,
+    context: { name: 'PDF Express' },
+    tocContext: {
+      _toc: [],
+    },
+  });
+  prepareToc(options2);
+  console.log('tocTemplate', options2.tocTemplate);
+  console.log('_toc', options2.tocContext._toc);
+
 }
 
 if (import.meta.main) {
