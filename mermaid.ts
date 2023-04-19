@@ -4,7 +4,7 @@ import {
   is,
   mermaid,
   Node,
-  optimize,
+  //optimize,
   OptimizedSvg,
   OptimizeOptions,
   Page,
@@ -261,10 +261,10 @@ async function getSvg(
 
   let value = graph;
 
-  if (svgo) {
-    const tmp = optimize(graph, svgo);
-    value = isOptimized(tmp) ? tmp.data : graph;
-  }
+  //if (svgo) {
+  //  const tmp = optimize(graph, svgo);
+  //  value = isOptimized(tmp) ? tmp.data : graph;
+  //}
   return value;
 }
 
