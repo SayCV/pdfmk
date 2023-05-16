@@ -93,7 +93,7 @@ const parse = async (md: string, config: Config, browser: Browser) => {
       link: [
         {
           rel: "stylesheet",
-          href: "https://cdn.jsdelivr.net/npm/katex@0.15.3/dist/katex.min.css",
+          href: "https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css",
           type: "text/css",
         },
         {
