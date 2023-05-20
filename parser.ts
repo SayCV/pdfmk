@@ -46,11 +46,28 @@ async function preprocessStyleCssFile(config: Config) {
 
 const parse = async (md: string, config: Config, browser: Browser) => {
   // cdn resolution: there are two repos providing prism themes
-  const themeFileURL = config.prismTheme === "default"
-    ? `https://cdn.skypack.dev/prismjs/themes/prism.css`
-    : isBaseTheme(config.prismTheme)
-      ? `https://cdn.skypack.dev/prismjs/themes/${config.prismTheme}.css`
-      : `https://cdn.skypack.dev/prism-themes/themes/prism-${config.prismTheme}.css`;
+  const prism_css_local = Deno.env.get("DOCXPROD_ROOT") + "/data/prism.css";
+  let themeFileURL = "file:///" + prism_css_local;
+  if (config.prismTheme === "default") {
+    try {
+      Deno.statSync(prism_css_local).isFile;
+    } catch (_error) {
+      themeFileURL = `https://cdn.skypack.dev/prismjs/themes/prism.css`;
+    }
+  } else {
+    if (isBaseTheme(config.prismTheme)) {
+      themeFileURL = `https://cdn.skypack.dev/prismjs/themes/${config.prismTheme}.css`;
+    } else {
+      themeFileURL = `https://cdn.skypack.dev/prism-themes/themes/prism-${config.prismTheme}.css`;
+    }
+  }
+  const katex_css_local = Deno.env.get("DOCXPROD_ROOT") + "/data/katex.min.css";
+  let katex_css_url = "file:///" + katex_css_local;
+  try {
+    Deno.statSync(katex_css_local).isFile;
+  } catch (_error) {
+    katex_css_url = `https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css`;
+  }
 
   const processor = unified()
     .use(remarkParse)
@@ -93,7 +110,7 @@ const parse = async (md: string, config: Config, browser: Browser) => {
       link: [
         {
           rel: "stylesheet",
-          href: "https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css",
+          href: katex_css_url,
           type: "text/css",
         },
         {

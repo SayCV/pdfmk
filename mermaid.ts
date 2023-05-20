@@ -7,6 +7,7 @@ import {
   //optimize,
   OptimizedSvg,
   OptimizeOptions,
+  path,
   Page,
   Paragraph,
   Parent,
@@ -194,9 +195,19 @@ const remarkMermaid: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
     await page.setViewport({ width: 1000, height: 3000 });
     const html = `<!DOCTYPE html>`;
     await page.setContent(html);
-    await page.addScriptTag({
-      url: "https://cdn.skypack.dev/mermaid/dist/mermaid.min.js",
-    });
+    const mermaid_js_local = Deno.env.get("DOCXPROD_ROOT") + "/data/mermaid.min.js";
+    let mermaid_js_url = path.resolve(mermaid_js_local);
+    try {
+      Deno.statSync(mermaid_js_local).isFile;
+      await page.addScriptTag({
+        path: mermaid_js_url,
+      });
+    } catch (_error) {
+      await page.addScriptTag({
+        url: "https://cdn.skypack.dev/mermaid/dist/mermaid.min.js",
+      });
+    }
+
     visit(node, isMermaid, visitor);
     await Promise.all(promises.map((t) => t()));
     if (!settings.browser) {
