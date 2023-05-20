@@ -195,16 +195,24 @@ const remarkMermaid: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
     await page.setViewport({ width: 1000, height: 3000 });
     const html = `<!DOCTYPE html>`;
     await page.setContent(html);
-    const mermaid_js_local = Deno.env.get("DOCXPROD_ROOT") + "/data/mermaid.min.js";
-    let mermaid_js_url = path.resolve(mermaid_js_local);
+    const mermaid_js_local = path.join(Deno.env.get("DOCXPROD_ROOT"), "/data/mermaid.min.js");
+    //let mermaid_js_url = path.resolve(mermaid_js_local);
+    let mermaid_js_content = "";
+    let mermaid_js_url = "https://cdn.skypack.dev/mermaid/dist/mermaid.min.js";
+    let mermaid_js_local_exist = true;
     try {
       Deno.statSync(mermaid_js_local).isFile;
-      await page.addScriptTag({
-        path: mermaid_js_url,
-      });
+      mermaid_js_content = await Deno.readTextFile(mermaid_js_local);
     } catch (_error) {
+      mermaid_js_local_exist = false;
+    }
+    if (mermaid_js_local_exist) {
       await page.addScriptTag({
-        url: "https://cdn.skypack.dev/mermaid/dist/mermaid.min.js",
+        content: mermaid_js_content,
+      });
+    } else {
+      await page.addScriptTag({
+        url: mermaid_js_url,
       });
     }
 
