@@ -176,7 +176,7 @@ const remarkMermaid: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
       headless: true,
     },
     svgo: defaultSVGOOptions,
-    theme: "default",
+    theme: "neutral",
     wrap: false,
     classname: [],
   };
@@ -207,13 +207,18 @@ const remarkMermaid: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
       mermaid_js_local_exist = false;
     }
     if (mermaid_js_local_exist) {
+      console.log(":: Load ", mermaid_js_local_exist);
       await page.addScriptTag({
         content: mermaid_js_content,
       });
     } else {
+      console.log(":: Load ", mermaid_js_url);
       await page.addScriptTag({
         url: mermaid_js_url,
       });
+    }
+    if (true) {
+      await page.screenshot({ path: path.resolve(Deno.cwd(), '1.png'), fullPage: true });
     }
 
     visit(node, isMermaid, visitor);

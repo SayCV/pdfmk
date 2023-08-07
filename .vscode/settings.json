@@ -3,4 +3,5 @@
     "editor.insertSpaces": true,
     "files.eol": "\n",
     "files.trimTrailingWhitespace": true,
+    "deno.enable": false,
 }
