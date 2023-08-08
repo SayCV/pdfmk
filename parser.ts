@@ -19,7 +19,7 @@ import {
   rehypeRaw,
   remarkToc,
   //shiki,
-  remarkMermaidJs,
+  remarkMermaidTemando,
   unified,
 } from "./deps.ts";
 import { default as remarkAutoNumber } from "./remark-autonumber.ts";
@@ -84,7 +84,7 @@ const parse = async (md: string, config: Config, browser: Browser) => {
       enable: config.numberSections,
       level: config.shiftHeadingLevelBy,
     })
-    .use(remarkMermaidJs, {})
+    .use(remarkMermaidTemando, {})
     //.use(remarkMermaid, {
     //  browser: browser,
     //  launchOptions: {
