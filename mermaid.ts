@@ -153,7 +153,7 @@ function svgParse(svg: string): Node {
 }
 
 function isMermaid(node: unknown): node is Code {
-  if (!is(node, { type: "code", lang: "mermaid1" })) {
+  if (!is(node, { type: "code", lang: "mermaid" })) {
     return false;
   }
   console.log(":: Found Mermaid...");
@@ -175,6 +175,7 @@ const remarkMermaid: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
     launchOptions: {
       product: "chrome",
       headless: true,
+      dumpio: true,
     },
     svgo: defaultSVGOOptions,
     theme: "neutral",
@@ -199,7 +200,7 @@ const remarkMermaid: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
     const mermaid_js_local = path.join(Deno.env.get("DOCXPROD_ROOT"), "/data/mermaid.min.js");
     //let mermaid_js_url = path.resolve(mermaid_js_local);
     let mermaid_js_content = "";
-    let mermaid_js_url = "https://cdn.skypack.dev/mermaid/dist/mermaid.min.js";
+    let mermaid_js_url = "https://unpkg.com/mermaid/dist/mermaid.min.js";
     let mermaid_js_local_exist = true;
     try {
       Deno.statSync(mermaid_js_local).isFile;
@@ -220,11 +221,9 @@ const remarkMermaid: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
     }
     if (true) {
       const tmpFileName: string = path.resolve(Deno.cwd(), 'mermaid.html');
-      const session = await page.target().createCDPSession();
-      await session.send('Page.enable');
-      const {data} = await session.send('Page.captureSnapshot');
-      //console.log(data);
-      await Deno.writeTextFile(tmpFileName, data);
+      const content = await page.content();
+      //console.log(content);
+      await Deno.writeTextFile(tmpFileName, content);
     }
 
     //console.log(":: visit... ", node);
@@ -280,24 +279,27 @@ async function getSvg(
   theme: MermaidTheme,
   svgo: OptimizeOptions,
 ) {
+  console.log(":: mermaid node.value... ", node.value);
+
   const graph = await page.evaluate(
     ([code, t]: [string, MermaidTheme]) => {
       const id = "a";
-      mermaid.initialize({theme: t as Theme });
-      console.log(":: mermaid.initialize Done...");
+      mermaid.initialize({startOnLoad: true, theme: t as Theme });
       // @ts-ignore: code evaluated in browser
+      // https://mermaid.js.org/config/usage.html
       const div = document.createElement("div");
       div.innerHTML = mermaid.render(id, code);
-      console.log(":: mermaid.render Done...");
-      return div.innerHTML as string;
+      return Promise.resolve(div.innerHTML);
     },
     [node.value, theme],
   );
 
   let value = graph;
+  console.log(":: mermaid.render graph : ", graph);
 
   if (svgo) {
     const tmp = optimize(graph, svgo);
+    console.log(":: mermaid svgo ", isOptimized(tmp));
     value = isOptimized(tmp) ? tmp.data : graph;
   }
   console.log(":: getSvg Done...");
