@@ -19,6 +19,7 @@ import {
   rehypeRaw,
   remarkToc,
   //shiki,
+  remarkMermaidJs,
   unified,
 } from "./deps.ts";
 import { default as remarkAutoNumber } from "./remark-autonumber.ts";
@@ -83,16 +84,17 @@ const parse = async (md: string, config: Config, browser: Browser) => {
       enable: config.numberSections,
       level: config.shiftHeadingLevelBy,
     })
-    .use(remarkMermaid, {
-      browser: browser,
-      launchOptions: {
-        executablePath: config.chromePath,
-      },
-      wrap: true,
-      theme: config.mermaidTheme,
-      classname: ["mermaid"],
-      svgo: null as any,
-    })
+    .use(remarkMermaidJs, {})
+    //.use(remarkMermaid, {
+    //  browser: browser,
+    //  launchOptions: {
+    //    executablePath: config.chromePath,
+    //  },
+    //  wrap: true,
+    //  theme: config.mermaidTheme,
+    //  classname: ["mermaid"],
+    //  svgo: null as any,
+    //})
     .use(remarkRehype, {
       allowDangerousHtml: true,
       footnoteLabel: await getDefaultFootnoteLabel(),
@@ -100,7 +102,7 @@ const parse = async (md: string, config: Config, browser: Browser) => {
     })
     .use(rehypeRaw)
     .use(rehypeKatex)
-    .use(rehypePrism)
+    //.use(rehypePrism)
     //.use(rehypeShiki, {
     //  highlighter: await shiki.getHighlighter({ theme: "nord" }),
     //})
