@@ -4,7 +4,7 @@ import {
   is,
   mermaid,
   Node,
-  //optimize,
+  optimize,
   OptimizedSvg,
   OptimizeOptions,
   path,
@@ -153,9 +153,10 @@ function svgParse(svg: string): Node {
 }
 
 function isMermaid(node: unknown): node is Code {
-  if (!is(node, { type: "code", lang: "mermaid" })) {
+  if (!is(node, { type: "code", lang: "mermaid1" })) {
     return false;
   }
+  console.log(":: Found Mermaid...");
   return true;
 }
 
@@ -218,11 +219,19 @@ const remarkMermaid: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
       });
     }
     if (true) {
-      await page.screenshot({ path: path.resolve(Deno.cwd(), '1.png'), fullPage: true });
+      const tmpFileName: string = path.resolve(Deno.cwd(), 'mermaid.html');
+      const session = await page.target().createCDPSession();
+      await session.send('Page.enable');
+      const {data} = await session.send('Page.captureSnapshot');
+      //console.log(data);
+      await Deno.writeTextFile(tmpFileName, data);
     }
 
+    //console.log(":: visit... ", node);
     visit(node, isMermaid, visitor);
+    console.log(":: visit done");
     await Promise.all(promises.map((t) => t()));
+    console.log(":: promises done");
     if (!settings.browser) {
       await browser.close();
     }
@@ -274,10 +283,12 @@ async function getSvg(
   const graph = await page.evaluate(
     ([code, t]: [string, MermaidTheme]) => {
       const id = "a";
-      mermaid.initialize({ theme: t as Theme });
+      mermaid.initialize({theme: t as Theme });
+      console.log(":: mermaid.initialize Done...");
       // @ts-ignore: code evaluated in browser
       const div = document.createElement("div");
       div.innerHTML = mermaid.render(id, code);
+      console.log(":: mermaid.render Done...");
       return div.innerHTML as string;
     },
     [node.value, theme],
@@ -285,10 +296,11 @@ async function getSvg(
 
   let value = graph;
 
-  //if (svgo) {
-  //  const tmp = optimize(graph, svgo);
-  //  value = isOptimized(tmp) ? tmp.data : graph;
-  //}
+  if (svgo) {
+    const tmp = optimize(graph, svgo);
+    value = isOptimized(tmp) ? tmp.data : graph;
+  }
+  console.log(":: getSvg Done...");
   return value;
 }
 

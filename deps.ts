@@ -41,7 +41,7 @@ export type {
   Code,
   Paragraph,
 } from "https://cdn.skypack.dev/@types/mdast@3.0.10?dts";
-export { default as mermaid } from "https://esm.sh/mermaid@9.1.3";
+export { default as mermaid } from "https://esm.sh/mermaid@10.3.0";
 export { optimize } from "https://esm.sh/svgo@2.8.0";
 export type { OptimizedSvg, OptimizeOptions } from "https://esm.sh/svgo@2.8.0";
 export type { VFileCompatible } from "https://esm.sh/vfile@5.3.4";
