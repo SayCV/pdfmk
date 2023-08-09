@@ -102,7 +102,7 @@ const parse = async (md: string, config: Config, browser: Browser) => {
     .use(rehypeRaw)
     //.use(rehypeMermaid, {})
     .use(rehypeKatex)
-    //.use(rehypePrism)
+    .use(rehypePrism)
     //.use(rehypeShiki, {
     //  highlighter: await shiki.getHighlighter({ theme: "nord" }),
     //})
