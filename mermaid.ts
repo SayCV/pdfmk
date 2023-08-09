@@ -168,7 +168,7 @@ function isOptimized(arg: unknown): arg is OptimizedSvg {
   );
 }
 
-const remarkMermaid: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
+const remarkMermaid0: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
   options,
 ): Transformer {
   const DEFAULT_SETTINGS = {
@@ -194,6 +194,7 @@ const remarkMermaid: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
     const browser = settings.browser ||
       await puppeteer.launch(settings.launchOptions);
     const page = await browser.newPage();
+    page.on('console', event => console.log(event.text()));
     await page.setViewport({ width: 1000, height: 3000 });
     const html = `<!DOCTYPE html>`;
     await page.setContent(html);
@@ -289,6 +290,7 @@ async function getSvg(
       // https://mermaid.js.org/config/usage.html
       const div = document.createElement("div");
       div.innerHTML = mermaid.render(id, code);
+      console.log(":: mermaid.render div.innerHTML : ", div.innerHTML);
       return Promise.resolve(div.innerHTML);
     },
     [node.value, theme],
@@ -304,6 +306,19 @@ async function getSvg(
   }
   console.log(":: getSvg Done...");
   return value;
+}
+
+function find_transform(tree) {
+  visit(tree, isMermaid, (node: Node, index: number) => {
+    tree.children[index] = {
+      type: 'html',
+      value: `<div class="mermaid">${node.value}</div>`.trim(),
+    };
+  });
+}
+
+function remarkMermaid() {
+  return find_transform;
 }
 
 export default remarkMermaid;

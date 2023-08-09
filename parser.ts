@@ -19,7 +19,7 @@ import {
   rehypeRaw,
   remarkToc,
   //shiki,
-  remarkMermaidTemando,
+  //rehypeMermaid,
   unified,
 } from "./deps.ts";
 import { default as remarkAutoNumber } from "./remark-autonumber.ts";
@@ -84,23 +84,23 @@ const parse = async (md: string, config: Config, browser: Browser) => {
       enable: config.numberSections,
       level: config.shiftHeadingLevelBy,
     })
-    .use(remarkMermaidTemando, {})
-    //.use(remarkMermaid, {
-    //  browser: browser,
-    //  launchOptions: {
-    //    executablePath: config.chromePath,
-    //  },
-    //  wrap: true,
-    //  theme: config.mermaidTheme,
-    //  classname: ["mermaid"],
-    //  svgo: null as any,
-    //})
+    .use(remarkMermaid, {
+      browser: browser,
+      launchOptions: {
+        executablePath: config.chromePath,
+      },
+      wrap: true,
+      theme: config.mermaidTheme,
+      classname: ["mermaid"],
+      svgo: null as any,
+    })
     .use(remarkRehype, {
       allowDangerousHtml: true,
       footnoteLabel: await getDefaultFootnoteLabel(),
       //footnoteBackLabel: '返回',
     })
     .use(rehypeRaw)
+    //.use(rehypeMermaid, {})
     .use(rehypeKatex)
     //.use(rehypePrism)
     //.use(rehypeShiki, {

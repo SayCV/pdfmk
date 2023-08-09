@@ -47,7 +47,8 @@ export type { OptimizedSvg, OptimizeOptions } from "https://esm.sh/svgo@2.8.0";
 export type { VFileCompatible } from "https://esm.sh/vfile@5.3.4";
 export { visit } from "https://esm.sh/unist-util-visit@4.1.0";
 
-export { default as remarkMermaidTemando } from "https://esm.sh/remark-mermaid@0.2.0";
+//export { default as rehypeMermaid } from "https://cdn.skypack.dev/rehype-mermaidjs@1.0.1";
+//export { default as remarkMermaidTemando } from "https://esm.sh/remark-mermaid@0.2.0";
 //export { default as remarkMermaidJs } from "https://esm.sh/remark-mermaidjs@5.0.1/index.js";
 
 // puppeteer deps
