@@ -317,8 +317,19 @@ function find_transform(tree) {
   });
 }
 
-function remarkMermaid() {
-  return find_transform;
-}
+const remarkMermaid: Plugin<[RemarkMermaidOptions?]> = function mermaidTrans(
+  options,
+): Transformer {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // deno-lint-ignore require-await
+  return async (ast: Node, _file: VFileCompatible) => {
+    visit(ast, isMermaid, (node: Node, index: number) => {
+      ast.children[index] = {
+        type: 'html',
+        value: `<div class="mermaid">${node.value}</div>`.trim(),
+      };
+    });
+  };
+};
 
 export default remarkMermaid;
