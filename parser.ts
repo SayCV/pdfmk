@@ -101,7 +101,7 @@ const parse = async (md: string, config: Config, browser: Browser) => {
     })
     .use(rehypeRaw)
     //.use(rehypeMermaid, {})
-    .use(rehypeKatex)
+    .use(rehypeKatex, {errorColor: 'orange', strict: 'ignore'})
     .use(rehypePrism)
     //.use(rehypeShiki, {
     //  highlighter: await shiki.getHighlighter({ theme: "nord" }),
