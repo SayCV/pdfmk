@@ -132,7 +132,7 @@ const { args, options } = await new Command()
 
 const inputPath = path.resolve(Deno.cwd(), args[0]);
 
-if (options.bv) {
+if (options.bi) {
   console.log("\nGenerate PDF from Markdown file\n");
   console.log(`pdfmk version ${VERSION} (r${gitRevCount}.${gitRevParse}, Built at ${buildDate}))\n`);
 }
