@@ -6,6 +6,7 @@ export {
 export * as path from "https://deno.land/std@0.141.0/path/mod.ts";
 export { colors } from "https://deno.land/x/cliffy@v0.24.2/ansi/colors.ts";
 export { default as os } from "https://deno.land/x/dos@v0.11.0/mod.ts";
+export { format } from "https://deno.land/std@0.91.0/datetime/mod.ts";
 
 // unified deps
 export { unified } from "https://esm.sh/unified@10.1.2";

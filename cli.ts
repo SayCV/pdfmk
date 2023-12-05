@@ -1,10 +1,11 @@
-import { colors, Command, path, puppeteer } from "./deps.ts";
+import { format, colors, Command, path, puppeteer } from "./deps.ts";
 import parse from "./parser.ts";
 import printPDF from "./print.ts";
 import executablePathForChannel from "./chromium.ts";
 import type { Config } from "./types.ts";
 import { channel, mermaidTheme, paperFormat, prismTheme } from "./types.ts";
 import { commandName, VERSION } from "./version.ts";
+import { buildDate, gitRevCount, gitRevParse } from "./build.gen.ts";
 
 const { args, options } = await new Command()
   .name(commandName)
@@ -28,7 +29,8 @@ const { args, options } = await new Command()
   )
   .option(
     "-f, --format <format:paperFormat>",
-    `Paper format. (Default: letter)\n  ${colors.green('"a0" - "a5", "letter", "legal", "tabloid"')
+    `Paper format. (Default: letter)\n  ${
+      colors.green('"a0" - "a5", "letter", "legal", "tabloid"')
     }`,
     {
       default: "a4" as const,
@@ -47,23 +49,26 @@ const { args, options } = await new Command()
     }
   })
   .option(
-    "-h, --hMargin <hMargin>",
+    "--hMargin <hMargin>",
     `Margin. (Default: "20mm")`,
     {
       default: "20mm",
     },
   )
   .option(
-    "-v, --vMargin <vMargin>",
+    "--vMargin <vMargin>",
     `Margin. (Default: "20mm")`,
     {
       default: "20mm",
     },
   )
   .option(
-    "--svgo <svgo:boolean>", `Enable svg optimize`, {
-    default: false,
-  })
+    "--svgo <svgo:boolean>",
+    `Enable svg optimize`,
+    {
+      default: false,
+    },
+  )
   .option(
     "-p, --prismTheme <theme:prismTheme>",
     "Prism theme. 44 themes available.",
@@ -116,23 +121,35 @@ const { args, options } = await new Command()
       default: false,
     },
   )
+  .option(
+    "--bi",
+    "build info",
+    {
+      default: true,
+    },
+  )
   .parse(Deno.args);
 
 const inputPath = path.resolve(Deno.cwd(), args[0]);
+
+if (options.bv) {
+  console.log("\nGenerate PDF from Markdown file\n");
+  console.log(`pdfmk version ${VERSION} (r${gitRevCount}.${gitRevParse}, Built at ${buildDate}))\n`);
+}
 
 const headerTemplate = Deno.env.get("HEADER_TEMPLATE_FILE")
   ? await Deno.readTextFile(
     path.resolve(Deno.cwd(), Deno.env.get("HEADER_TEMPLATE_FILE") || ""),
   )
   : Deno.env.get("HEADER_TEMPLATE") ||
-  '<div style="font-size: 9px; margin-left: 1cm;"> </div> <div style="font-size: 9px; margin-left: auto; margin-right: 1cm; "> <span>%%ISO-DATE%%</span></div>';
+    '<div style="font-size: 9px; margin-left: 1cm;"> </div> <div style="font-size: 9px; margin-left: auto; margin-right: 1cm; "> <span>%%ISO-DATE%%</span></div>';
 
 const footerTemplate = Deno.env.get("FOOTER_TEMPLATE_FILE")
   ? await Deno.readTextFile(
     path.resolve(Deno.cwd(), Deno.env.get("FOOTER_TEMPLATE_FILE") || ""),
   )
   : Deno.env.get("FOOTER_TEMPLATE") ||
-  "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span> / <span class='totalPages'></span></div>";
+    "<div style=\"font-size: 9px; margin: 0 auto;\"> <span class='pageNumber'></span> / <span class='totalPages'></span></div>";
 
 const config: Config = {
   input: inputPath,
